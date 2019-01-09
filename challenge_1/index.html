@@ -31,22 +31,16 @@
         <script src='app.js'></script>
     </head>
     <body>
-        <div class='board'>
-        <table>
-            <tr> <td onclick="return togglePlayer(event);" id='0,0'></td><td onclick="return togglePlayer(event);" id='0,1'></td><td onclick="return togglePlayer(event);" id='0,2'></td> </tr>
-            <tr> <td onclick="return togglePlayer(event);" id='1,0'></td><td onclick="return togglePlayer(event);" id='1,1'></td><td onclick="return togglePlayer(event);" id='1,2'></td> </tr>
-            <tr> <td onclick="return togglePlayer(event);" id='2,0'></td><td onclick="return togglePlayer(event);" id='2,1'></td><td onclick="return togglePlayer(event);" id='2,2'></td> </tr>
-        </table>
-        </div>
+        <div id='board'> </div>
         <div class='resetBtn'>
-            <button class='resetbutton' > RESET </button>
+            <button class='resetbutton' onclick="reset()" > RESET </button>
         </div>
         <div class='message'>
             Player <span id='player'> 1 </span>'s turn
         </div>
 
         <script>
-           startGame(3);
+           startGame(4);
         </script>
     </body>
 

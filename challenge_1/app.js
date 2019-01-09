@@ -23,6 +23,7 @@ var startGame = function (size) {
     tttGame.size = size;
     tttGame.map = createMap();
     //render html
+    document.getElementById('board').innerHTML = renderBoard();
 };
 //calc players move
 
@@ -41,15 +42,15 @@ var checkDiagonals = function (row, col, player) {
     if(drIndex >= 0){
         var base = 0;
         for(var i = drIndex; i< tttGame.size; i++ ){
-            console.log('i: ',drIndex,' r: ',base, ' c: ',i);
-            console.log('row: ',tttGame.map[base]);
+            // console.log('i: ',drIndex,' r: ',base, ' c: ',i);
+            // console.log('row: ',tttGame.map[base]);
             if(tttGame.map[base++][i] == player) check++;
         }
     } else {
         var base = 0;
         for(var i = Math.abs(drIndex); i< tttGame.size; i++ ){
-            console.log('i: ',drIndex,' r: ',base, ' c: ',i);
-            console.log('row: ',tttGame.map[base]);
+            // console.log('i: ',drIndex,' r: ',base, ' c: ',i);
+            // console.log('row: ',tttGame.map[base]);
             if(tttGame.map[i][base++] == player) check++;
         }
     }
@@ -60,15 +61,15 @@ var checkDiagonals = function (row, col, player) {
     if(dLIndex > 0){
         var base = 0;
         for(var i = (tttGame.size - 1 - dLIndex); i >= 0; i-- ){
-            console.log('i: ',dLIndex,' r: ',base, ' c: ',i);
-            console.log('row: ',tttGame.map[base]);
+            // console.log('i: ',dLIndex,' r: ',base, ' c: ',i);
+            // console.log('row: ',tttGame.map[base]);
             if(tttGame.map[base++][i] == player) check++;
         }
     } else {
         var base = tttGame.size -1;
         for(var i = Math.abs(dLIndex); i < tttGame.size; i++ ){
-            console.log('i: ',dLIndex,' r: ',base, ' c: ',i);
-            console.log('row: ',tttGame.map[base]);
+            // console.log('i: ',dLIndex,' r: ',base, ' c: ',i);
+            // console.log('row: ',tttGame.map[base]);
             if(tttGame.map[i][base--] == player) check++;
         }
     }
@@ -97,7 +98,7 @@ var togglePlayer = function(e){
     pos.removeAttribute(onclick);
     var rowCol = e.target.id.split(',');
     var player = Number(document.getElementById('player').innerHTML);
-    console.log(rowCol, player);
+    // console.log(rowCol, player);
     if(tttGame.map[rowCol[0]][rowCol[1]] != 0) { return; }
 
     //update board
@@ -120,11 +121,25 @@ var togglePlayer = function(e){
 };
 
 var reset = function(){
-    createMap();
-    //render new table/board
+    tttGame.map = createMap();
+    window.location.reload();
+    document.getElementById('player').innerHTML = 1;//change player
+    document.getElementById('board').innerHTML = renderBoard();
 };
 
 var playerWon = function(player){
-    //create an alert indicating who won
-    console.log(`Player ${player} Won!!!!!`);
+    alert(`Player ${player} Won!!!!`);
+};
+
+var renderBoard = function() {
+    var html = `<table> \n`;
+    for(var i = 0; i < tttGame.size; i++){
+        html += `<tr>`;
+        for(var j=0; j<tttGame.size; j++){
+            html += `<td onclick="return togglePlayer(event);" id='${i},${j}'></td>`;
+        }
+        html+= `</tr>\n`;
+    }
+    html += `</table>`;
+    return html;
 };
