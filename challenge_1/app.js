@@ -3,6 +3,7 @@
 
 var tttGame = {
     size: 3,
+    movesLeft: 9,
     p1: 1, //keep track of points later
     p2:2
 };
@@ -22,6 +23,7 @@ var createMap = function () {
 var startGame = function (size) {
     tttGame.size = size;
     tttGame.map = createMap();
+    tttGame.movesLeft = Math.pow(size, 2) - 1;
     //render html
     document.getElementById('board').innerHTML = renderBoard();
 };
@@ -116,6 +118,10 @@ var togglePlayer = function(e){
         playerWon(player);
     } else if (checkDiagonals(rowCol[0],rowCol[1], player)) {
         playerWon(player);
+    } else if(tttGame.movesLeft <= 0){//tie/draw
+        alert('Game was a tie!');
+    } else{
+        tttGame.movesLeft = tttGame.movesLeft - 1;
     }
 
 };
