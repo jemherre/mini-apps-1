@@ -7,11 +7,11 @@ var tttGame = {
     p2:2
 };
 
-var createMap = function (size) {
+var createMap = function () {
     var map = [];
-    for(var i = 0; i< size; i++){
+    for(var i = 0; i< tttGame.size; i++){
         var row = [];
-        for(var j = 0; j < size; j++){
+        for(var j = 0; j < tttGame.size; j++){
             row.push(0);
         }
         map.push(row);
@@ -19,9 +19,12 @@ var createMap = function (size) {
     return map;
 };
 
-var startGame = function () {
-    tttGame.map = createMap(tttGame.size);
+var startGame = function (size) {
+    tttGame.size = size;
+    tttGame.map = createMap();
+    //render html
 };
+//calc players move
 
 var calculateIndexDR= function (row, col) {
     return col - row; 
@@ -30,8 +33,7 @@ var calculateIndexDR= function (row, col) {
 var calculateIndexDL = function (row, col) {
     return (tttGame.size -1) - col - row; 
 };
-
-
+//checks players move if won or not
 var checkDiagonals = function (row, col, player) {
     var check = 0;
     //DR
@@ -75,7 +77,6 @@ var checkDiagonals = function (row, col, player) {
 };
 
 var checkRowCol= function (row, col, player) {
-    /
 
     var check = 0;
     for(var i =  0; i< tttGame.size; i++ ){ //horizontal
@@ -89,4 +90,41 @@ var checkRowCol= function (row, col, player) {
     }
     if(check >= tttGame.size) return true;//wins
     return false;//
+};
+
+var togglePlayer = function(e){
+    var pos = document.getElementById(e.target.id);
+    pos.removeAttribute(onclick);
+    var rowCol = e.target.id.split(',');
+    var player = Number(document.getElementById('player').innerHTML);
+    console.log(rowCol, player);
+    if(tttGame.map[rowCol[0]][rowCol[1]] != 0) { return; }
+
+    //update board
+    tttGame.map[rowCol[0]][rowCol[1]] = player;
+    if(player == 1) {
+        pos.innerHTML = 'X';
+        document.getElementById('player').innerHTML = 2;//change player
+    } else {
+        pos.innerHTML = 'O';
+        document.getElementById('player').innerHTML = 1;//change player
+    }
+
+    //check for any wins
+    if(checkRowCol(rowCol[0],rowCol[1], player)) {
+        playerWon(player);
+    } else if (checkDiagonals(rowCol[0],rowCol[1], player)) {
+        playerWon(player);
+    }
+
+};
+
+var reset = function(){
+    createMap();
+    //render new table/board
+};
+
+var playerWon = function(player){
+    //create an alert indicating who won
+    console.log(`Player ${player} Won!!!!!`);
 };
