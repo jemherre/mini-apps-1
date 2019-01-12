@@ -7,7 +7,7 @@ app.use(express.static('client'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-var jsonParse = function (obj, arr, keyCol){
+var csvParse = function (obj, arr, keyCol){
     var result = '';
     for(var key in obj){
         if(!keyCol[key] & (key != 'children')) { //add new key into key column list
@@ -18,7 +18,7 @@ var jsonParse = function (obj, arr, keyCol){
         } else {
             result = arr.join() + '\n';
             for(var i = 0; i< obj[key].length; i++){
-                result += jsonParse(obj[key][i], [], keyCol);
+                result += csvParse(obj[key][i], [], keyCol);
             }
         }
     }
@@ -37,11 +37,14 @@ var renderForm = function(){
 
 app.post('/getCSV', function(req, res){
     //make sure data has no semicolon
-    var data = JSON.parse(req.body.textarea);
-    var keyColumn = {};
-    var result = jsonParse(data, [],keyColumn);
-    var csvData = Object.keys(keyColumn).join() + '\n' + result;
-    res.send(`${renderForm()}<br><p>${csvData}</p>`);
+    var data = req.body.filepicker;
+    console.log('data~~ ',data);
+
+    // var keyColumn = {};
+    // var result = csvParse(data, [],keyColumn);
+    // var csvData = Object.keys(keyColumn).join() + '\n' + result;
+    // res.send(`${renderForm()}<br><p>${csvData}</p>`);
+    res.end();
   });
 
 module.exports = app;
