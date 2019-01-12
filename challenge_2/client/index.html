@@ -4,13 +4,11 @@
         
         </style>
     </head>
-    <script src='app.js'></script>
+    <script src='./app.js'></script>
+    <script src='./helperFunc.js'></script>
 
     <body>
-        <form action='/getCSV' method='post'>
-            <input type="file" accept='.json' name="filepicker">
-            <input type="submit" value="Submit">
-        </form>
+        <input type="file" onchange='openFile(event)'>
     </body>
 
 </html>
