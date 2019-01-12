@@ -1,0 +1,14 @@
+{
+  "name": "miniapp2",
+  "version": "1.0.0",
+  "description": "install dependency for csv generator",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "Jessica Herrera",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  }
+}
