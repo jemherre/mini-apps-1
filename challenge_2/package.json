@@ -8,8 +8,11 @@
   "author": "Jessica Herrera",
   "license": "ISC",
   "dependencies": {
+    "ajax": "0.0.4",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "file-api": "^0.10.4"
+    "express-fileupload": "^1.1.1-alpha.1",
+    "file-api": "^0.10.4",
+    "jquery": "^3.3.1"
   }
 }
