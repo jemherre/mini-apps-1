@@ -1,7 +1,18 @@
 <html>
     <head>
         <style>
-        
+        a:link{
+            background-color: #8cd3ff;
+            color: white;
+            padding: 5px 8px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 6px;
+        }
+        a:hover{
+            color: black;
+        }
         </style>
     </head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -13,7 +24,8 @@
             <input type="file" id='inputFile' name='inputFile'>
             <input type='submit' value='submit'>
         </form>
-        <div id='csvTemplate'></div>
+        <a href="/download_json" download>Download File</a>
+        <div class='csvTemplate'></div>
     </body>
     <script>
     </script>

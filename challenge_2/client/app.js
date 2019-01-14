@@ -6,16 +6,17 @@ $(document).ready(function(){
         if(fileInput.length !== 0){
             reader.onload = function () {
                 var fileData = reader.result;
-                console.log(fileData);
                 $.ajax({
                     method: 'POST', 
                     url: '/upload_json',
-                    data: {fileData},
+                    data: {
+                        'name': fileInput[0].name,
+                        fileData},
                     success: function(result){
-                        console.log(result);
                         //render html page here
-                        $('#csvTemplate').html('');//clear before appending
-                        $('#csvTemplate').append(result);
+                        $('.csvTemplate').html('');//clear before appending
+                        $('.csvTemplate').attr('filename', fileInput[0].name);
+                        $('.csvTemplate').append(result);
                     }
                 });
             }
