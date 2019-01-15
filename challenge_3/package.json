@@ -1,0 +1,19 @@
+{
+  "name": "challenge_3",
+  "version": "1.0.0",
+  "description": "installing all dependencies for project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "babel client --watch -d lib"
+  },
+  "author": "Jessica Herrera",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/preset-react": "^7.0.0",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  }
+}
