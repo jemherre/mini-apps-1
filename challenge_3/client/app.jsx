@@ -88,5 +88,4 @@ class LoadPage extends React.Component{
   }
 }
 
-
 ReactDOM.render(<LoadPage />, document.getElementById('shoppingCart')); //??
