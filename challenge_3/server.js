@@ -13,6 +13,21 @@ app.post('/createUser', function(req, res){
     res.end();
 });
 
+app.post('/billing', function(req, res){
+    console.log('Billing Info');
+    res.end();
+});
+
+app.post('/shipping', function(req, res){
+    console.log('Shipping Info');
+    res.end();
+});
+
+app.get('/confirmation', function(req, res){
+    console.log('confirmation');
+    res.end();
+});
+
 app.listen(port, function(){
     console.log(`Listening on port ${port}!`);
 });
