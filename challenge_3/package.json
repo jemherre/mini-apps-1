@@ -2,17 +2,10 @@
   "name": "challenge_3",
   "version": "1.0.0",
   "description": "installing all dependencies for project",
-<<<<<<< HEAD
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
     "build": "babel client --watch -d public --presets=@babel/preset-react"
-=======
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "build": "babel client --watch -d lib"
->>>>>>> 472a1c67dc05ba439a72004c8237373cccea7e98
   },
   "author": "Jessica Herrera",
   "license": "ISC",

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // class Home extends React.Component{
 //   constructor(props){
 //     super(props);
@@ -125,10 +124,3 @@ class LoadPage extends React.Component{
 }
 
 ReactDOM.render(<LoadPage />, document.getElementById('shoppingCart')); //??
-=======
-class Welcome extends React.Component {
-  render() {
-    return <h1>Hello, {this.props.name}</h1>;
-  }
-}
->>>>>>> 472a1c67dc05ba439a72004c8237373cccea7e98
