@@ -1,25 +1,11 @@
-// class Home extends React.Component{
-//   constructor(props){
-//     super(props);
-//   }
-//   render(){
-//     console.log('Home');
-//     return (
-//       <div id='home'>
-//         <button onClick={()=>{this.props.click()}}>Checkout</button> 
-//       </div>
-//     );
-//   }
-// }
-
 function CreateAccount(props){
   return (
     <div id='UserAccForm'>
-        <form method='POST' action='/createUser'>
-          <p>Name: <input type='text'/> </p>
-          <p>Email: <input type='text'/></p>
-          <p>Password:<input type='text'/> </p>
-          <input type='submit' onClick={(e)=>{props.click(e)}} value='next'/>
+        <form onSubmit={(e)=>{props.click(e)}}>
+          <p>Name: <input type='text' id='name'/> </p>
+          <p>Email: <input type='text' id='email'/></p>
+          <p>Password:<input type='password' id='password'/> </p>
+          <input type='submit' value='next'/>
         </form>
       </div>
     );
@@ -34,34 +20,34 @@ function HomePage(props){
   );
 }
 
-function BillingInfo(props){
-  return (
-    <div id='billingForm'>
-    <form method='POST' action='/billing'>
-    <p> Credit Card #: <input type='text'/></p>
-    <p>Expiry Date: <input type='text'/></p>
-    <p>CVV:<input type='text'/> </p>
-    <p>zip code: <input type='text'/></p>
-    <input type='submit' onClick={()=>{props.click()}} value='next'/>
-    </form>
-  </div>
-  );
-}
-
 function ShippingInfo(props){
   return (
     <div id='shippingForm'>
-        <form method='POST' action='/shipping'>
+        <form onSubmit={(e)=>{props.click(e)}}>
         Address:
-        <p>Line1:<input type='text'/> </p>
-        <p>Line2:<input type='text'/> </p>
-        <p>city:<input type='text'/> </p>
-        <p>state:<input type='text'/> </p>
-        <p>zip code:<input type='text'/></p>
-        <p>phone number:<input type='text'/> </p>
-        <input type='submit' onClick={()=>{props.click()}} value='next'/>
+        <p>Line1:<input type='text' id='l1'/> </p>
+        <p>Line2:<input type='text'id='l2'/> </p>
+        <p>city:<input type='text' id='city'/> </p>
+        <p>state:<input type='text' id='state'/> </p>
+        <p>zip code:<input type='text' id='zip'/></p>
+        <p>phone number:<input type='text' id='phone'/> </p>
+        <input type='submit' value='next'/>
         </form>
       </div>
+  );
+}
+
+function BillingInfo(props){
+  return (
+    <div id='billingForm'>
+      <form onClick={(e)=>{props.click(e)}} >
+        <p> Credit Card #: <input type='text' id='cc'/></p>
+        <p>Expiry Date: <input type='text' id='eDate'/></p>
+        <p>CVV:<input type='text' id='cvv'/> </p>
+        <p>zip code: <input type='text' id='zip'/></p>
+        <input type='submit' value='next'/>
+      </form>
+    </div>
   );
 }
 
@@ -86,35 +72,93 @@ class LoadPage extends React.Component{
     
     this.state = {
       form : 'homePage', 
-      page:<HomePage click={this.checkout}/>
+      page: <HomePage click={this.checkout}/>
     };
   }
 
-  checkout(event){
+  checkout(event){//homepage
     this.setState(state =>({form: 'userAccount',
       page: <CreateAccount click={this.submitUser}/>
     }));
   }
-  submitUser(event){ //needs to send info to server
+  submitUser(event){ //account
     event.preventDefault();
+    var user = {
+      name: document.getElementById('name').value,
+      email: document.getElementById('email').value,
+      password: document.getElementById('password').value
+    }; 
+    console.log(user);
+    $.ajax({
+      method: 'POST',
+      url: '/createUser',
+      data: user,
+      success: function(result){
+        console.log('success',result);
+      }
+    });
     this.setState(state=>({form:'shipping',
-    page: <ShippingInfo click={this.submitShipping}/>
-  }));
+      page: <ShippingInfo click={this.submitShipping}/>
+    }));
   }
-  submitShipping(event){
+  submitShipping(event){//shipping
+    event.preventDefault();
+    var ship = {
+      add1: document.getElementById('l1').value,
+      add2: document.getElementById('l2').value,
+      city: document.getElementById('city').value,
+      state: document.getElementById('state').value,
+      zip: document.getElementById('zip').value,
+      phone: document.getElementById('phone').value
+    };
+    console.log(ship);
+    $.ajax({
+      method: 'POST',
+      url: '/shipping',
+      data: ship,
+      success: function(result){
+        console.log('success',result);
+      }
+    });
     this.setState(state=>({form:'billing',
     page: <BillingInfo click={this.submitBilling}/>
   }));
   }
   submitBilling(event){
+    event.preventDefault();
+    var bill = {
+      cc: document.getElementById('cc').value,
+      eDate: document.getElementById('eDate').value,
+      cvv: document.getElementById('cvv').value,
+      zip: document.getElementById('zip').value
+    };
+    console.log(bill)
+    $.ajax({
+      method: 'POST',
+      url: '/billing',
+      data: bill,
+      success: function(result){
+        console.log('success',result);
+      }
+    });
     this.setState(state=>({form:'confirmation',
-    page: <ConfirmationPage click={this.submitConfirm}/>
-  }));
+      page: <ConfirmationPage click={this.submitConfirm}/>
+    }));
   }
   submitConfirm(event){
-    this.setState(state=>({form:'homePage',
+  var gotToHome = ()=>{this.setState(state=>({form:'homePage',
     page: <HomePage click={this.checkout}/>
-  }));
+  }))};
+
+  $.ajax({
+    method: 'GET',
+    url: 'confirmation',
+    success: function(result){
+      console.log('sucess',result);
+      goToHome();
+    }
+  });
+
   }
 
   render(){
@@ -123,4 +167,4 @@ class LoadPage extends React.Component{
   }
 }
 
-ReactDOM.render(<LoadPage />, document.getElementById('shoppingCart')); //??
+ReactDOM.render(<LoadPage />, document.getElementById('shoppingCart'));

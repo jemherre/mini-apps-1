@@ -1,33 +1,21 @@
-// class Home extends React.Component{
-//   constructor(props){
-//     super(props);
-//   }
-//   render(){
-//     console.log('Home');
-//     return (
-//       <div id='home'>
-//         <button onClick={()=>{this.props.click()}}>Checkout</button> 
-//       </div>
-//     );
-//   }
-// }
 function CreateAccount(props) {
   return React.createElement("div", {
     id: "UserAccForm"
   }, React.createElement("form", {
-    method: "POST",
-    action: "/createUser"
+    onSubmit: e => {
+      props.click(e);
+    }
   }, React.createElement("p", null, "Name: ", React.createElement("input", {
-    type: "text"
+    type: "text",
+    id: "name"
   }), " "), React.createElement("p", null, "Email: ", React.createElement("input", {
-    type: "text"
+    type: "text",
+    id: "email"
   })), React.createElement("p", null, "Password:", React.createElement("input", {
-    type: "text"
+    type: "password",
+    id: "password"
   }), " "), React.createElement("input", {
     type: "submit",
-    onClick: e => {
-      props.click(e);
-    },
     value: "next"
   })));
 } //onclick vs on submit
@@ -43,52 +31,58 @@ function HomePage(props) {
   }, "Checkout"));
 }
 
-function BillingInfo(props) {
-  return React.createElement("div", {
-    id: "billingForm"
-  }, React.createElement("form", {
-    method: "POST",
-    action: "/billing"
-  }, React.createElement("p", null, " Credit Card #: ", React.createElement("input", {
-    type: "text"
-  })), React.createElement("p", null, "Expiry Date: ", React.createElement("input", {
-    type: "text"
-  })), React.createElement("p", null, "CVV:", React.createElement("input", {
-    type: "text"
-  }), " "), React.createElement("p", null, "zip code: ", React.createElement("input", {
-    type: "text"
-  })), React.createElement("input", {
-    type: "submit",
-    onClick: () => {
-      props.click();
-    },
-    value: "next"
-  })));
-}
-
 function ShippingInfo(props) {
   return React.createElement("div", {
     id: "shippingForm"
   }, React.createElement("form", {
-    method: "POST",
-    action: "/shipping"
+    onSubmit: e => {
+      props.click(e);
+    }
   }, "Address:", React.createElement("p", null, "Line1:", React.createElement("input", {
-    type: "text"
+    type: "text",
+    id: "l1"
   }), " "), React.createElement("p", null, "Line2:", React.createElement("input", {
-    type: "text"
+    type: "text",
+    id: "l2"
   }), " "), React.createElement("p", null, "city:", React.createElement("input", {
-    type: "text"
+    type: "text",
+    id: "city"
   }), " "), React.createElement("p", null, "state:", React.createElement("input", {
-    type: "text"
+    type: "text",
+    id: "state"
   }), " "), React.createElement("p", null, "zip code:", React.createElement("input", {
-    type: "text"
+    type: "text",
+    id: "zip"
   })), React.createElement("p", null, "phone number:", React.createElement("input", {
-    type: "text"
+    type: "text",
+    id: "phone"
   }), " "), React.createElement("input", {
     type: "submit",
-    onClick: () => {
-      props.click();
-    },
+    value: "next"
+  })));
+}
+
+function BillingInfo(props) {
+  return React.createElement("div", {
+    id: "billingForm"
+  }, React.createElement("form", {
+    onClick: e => {
+      props.click(e);
+    }
+  }, React.createElement("p", null, " Credit Card #: ", React.createElement("input", {
+    type: "text",
+    id: "cc"
+  })), React.createElement("p", null, "Expiry Date: ", React.createElement("input", {
+    type: "text",
+    id: "eDate"
+  })), React.createElement("p", null, "CVV:", React.createElement("input", {
+    type: "text",
+    id: "cvv"
+  }), " "), React.createElement("p", null, "zip code: ", React.createElement("input", {
+    type: "text",
+    id: "zip"
+  })), React.createElement("input", {
+    type: "submit",
     value: "next"
   })));
 }
@@ -120,6 +114,7 @@ class LoadPage extends React.Component {
   }
 
   checkout(event) {
+    //homepage
     this.setState(state => ({
       form: 'userAccount',
       page: React.createElement(CreateAccount, {
@@ -129,8 +124,22 @@ class LoadPage extends React.Component {
   }
 
   submitUser(event) {
-    //needs to send info to server
+    //account
     event.preventDefault();
+    var user = {
+      name: document.getElementById('name').value,
+      email: document.getElementById('email').value,
+      password: document.getElementById('password').value
+    };
+    console.log(user);
+    $.ajax({
+      method: 'POST',
+      url: '/createUser',
+      data: user,
+      success: function (result) {
+        console.log('success', result);
+      }
+    });
     this.setState(state => ({
       form: 'shipping',
       page: React.createElement(ShippingInfo, {
@@ -140,6 +149,25 @@ class LoadPage extends React.Component {
   }
 
   submitShipping(event) {
+    //shipping
+    event.preventDefault();
+    var ship = {
+      add1: document.getElementById('l1').value,
+      add2: document.getElementById('l2').value,
+      city: document.getElementById('city').value,
+      state: document.getElementById('state').value,
+      zip: document.getElementById('zip').value,
+      phone: document.getElementById('phone').value
+    };
+    console.log(ship);
+    $.ajax({
+      method: 'POST',
+      url: '/shipping',
+      data: ship,
+      success: function (result) {
+        console.log('success', result);
+      }
+    });
     this.setState(state => ({
       form: 'billing',
       page: React.createElement(BillingInfo, {
@@ -149,6 +177,22 @@ class LoadPage extends React.Component {
   }
 
   submitBilling(event) {
+    event.preventDefault();
+    var bill = {
+      cc: document.getElementById('cc').value,
+      eDate: document.getElementById('eDate').value,
+      cvv: document.getElementById('cvv').value,
+      zip: document.getElementById('zip').value
+    };
+    console.log(bill);
+    $.ajax({
+      method: 'POST',
+      url: '/billing',
+      data: bill,
+      success: function (result) {
+        console.log('success', result);
+      }
+    });
     this.setState(state => ({
       form: 'confirmation',
       page: React.createElement(ConfirmationPage, {
@@ -158,12 +202,23 @@ class LoadPage extends React.Component {
   }
 
   submitConfirm(event) {
-    this.setState(state => ({
-      form: 'homePage',
-      page: React.createElement(HomePage, {
-        click: this.checkout
-      })
-    }));
+    var gotToHome = () => {
+      this.setState(state => ({
+        form: 'homePage',
+        page: React.createElement(HomePage, {
+          click: this.checkout
+        })
+      }));
+    };
+
+    $.ajax({
+      method: 'GET',
+      url: 'confirmation',
+      success: function (result) {
+        console.log('sucess', result);
+        goToHome();
+      }
+    });
   }
 
   render() {
@@ -173,4 +228,4 @@ class LoadPage extends React.Component {
 
 }
 
-ReactDOM.render(React.createElement(LoadPage, null), document.getElementById('shoppingCart')); //??
+ReactDOM.render(React.createElement(LoadPage, null), document.getElementById('shoppingCart'));
