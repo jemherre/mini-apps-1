@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+<<<<<<< HEAD
 var port = 3000;
  app.use(express.static(__dirname + "/public"));  //sets up index.html on localhost
 
@@ -30,4 +31,24 @@ app.get('/confirmation', function(req, res){
 
 app.listen(port, function(){
     console.log(`Listening on port ${port}!`);
+=======
+app.post('/create_account',function(req, res){
+
+});
+
+app.post('/shipping_info',function(req, res){
+
+});
+
+app.post('/billing_info',function(req, res){
+
+});
+
+app.get('/confirmation',function(req, res){
+
+});
+
+app.listen(3000, function(){
+    console.log('Listening on port: 3000!');
+>>>>>>> 472a1c67dc05ba439a72004c8237373cccea7e98
 });
