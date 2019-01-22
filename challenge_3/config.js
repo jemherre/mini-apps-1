@@ -28,7 +28,7 @@ var createDB = function(){
     (ship_id INTEGER PRIMARY KEY AUTOINCREMENT, 
       add1 varchar, add2 varchar,
       city varchar, state varchar, 
-      zip int, phonenumber int,
+      zip int, phone int,
       user_id int,
       FOREIGN KEY (user_id) REFERENCES Users (user_id) )`);
     db.run(`CREATE TABLE BillingInfo 
