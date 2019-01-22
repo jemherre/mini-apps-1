@@ -7,6 +7,7 @@ var db = new sqlite3.Database('./shoppingcart.db', (err) => {
 }); //opens and updates data in file
  
 var init = function(){
+  //look into creat tables if not exists
   db.run('SELECT * FROM Users',function(err){
     if(err){ //no such table exists
       createDB(); //then create the tables
@@ -22,10 +23,19 @@ var init = function(){
 var createDB = function(){
   console.log('creating tables');
   db.serialize(function() {
-    db.run(`CREATE TABLE Users (id INTEGER PRIMARY KEY, name varchar, email varchar, password varchar)`);
-    db.run(`CREATE TABLE ShippingInfo (id INTEGER PRIMARY KEY, add1 varchar, add2 varchar,city varchar, state varchar, zip int, phonenumber int, foreignKey int)`);
-    db.run(`CREATE TABLE BillingInfo (id INTEGER PRIMARY KEY,cc int, exp date,cvv int, zip int, foreignKey int)`);
-    db.run(`INSERT INTO Users (name, email, password) VALUES('Jess', 'jessaa', 'passs')`);
+    db.run(`CREATE TABLE Users (user_id INTEGER PRIMARY KEY AUTOINCREMENT, name varchar, email varchar, password varchar)`);
+    db.run(`CREATE TABLE ShippingInfo 
+    (ship_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+      add1 varchar, add2 varchar,
+      city varchar, state varchar, 
+      zip int, phonenumber int,
+      user_id int,
+      FOREIGN KEY (user_id) REFERENCES Users (user_id) )`);
+    db.run(`CREATE TABLE BillingInfo 
+    (bill_id INTEGER PRIMARY KEY AUTOINCREMENT, 
+      cc int, exp date,cvv int, zip int,
+      user_id int,
+      FOREIGN KEY (user_id) REFERENCES Users (user_id) )`);
   });
 };
 
