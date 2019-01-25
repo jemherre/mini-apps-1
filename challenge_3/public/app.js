@@ -69,13 +69,13 @@ function BillingInfo(props) {
     onClick: e => {
       props.click(e);
     }
-  }, React.createElement("p", null, " Credit Card #: ", React.createElement("input", {
+  }, React.createElement("p", null, " CC #: ", React.createElement("input", {
     type: "text",
     id: "cc"
   })), React.createElement("p", null, "Expiry Date: ", React.createElement("input", {
     type: "text",
     id: "eDate"
-  })), React.createElement("p", null, "CVV:", React.createElement("input", {
+  })), React.createElement("p", null, "C V V:", React.createElement("input", {
     type: "text",
     id: "cvv"
   }), " "), React.createElement("p", null, "zip code: ", React.createElement("input", {
@@ -87,10 +87,50 @@ function BillingInfo(props) {
   })));
 }
 
+function loadCartInfo(cb) {
+  $.ajax({
+    method: 'GET',
+    url: '/confirmation',
+    success: function (result) {
+      console.log('success', result);
+      var data = JSON.parse(result);
+      var html = `
+      <div id='user'> 
+      User:
+      <p>Name: ${data.user.name}</p>
+      <p>Email: ${data.user.email}</p>
+      </div>
+      <br>
+      <div id='address'>
+      Address:
+      <p>Address 1: ${data.ship.add1} </p>
+      <p>Address 2: ${data.ship.add2} </p>
+      <p>city: ${data.ship.city}</p>
+      <p>state: ${data.ship.state} </p>
+      <p>zip code: ${data.ship.zip}</p>
+      <p>phone number: ${data.ship.phone}</p>
+      </div>
+      <br>
+      <div id='billing'>
+      Billing:
+      <p>Credit Card#: ${data.bill.cc} </p>
+      <p>exp: ${data.bill.exp} </p>
+      <p>cvv: ${data.bill.cvv}</p>
+      <p>zip code: ${data.bill.zip}</p>
+      </div>`;
+      document.getElementById('info').innerHTML = html;
+    }
+  });
+}
+
+;
+
 function ConfirmationPage(props) {
   return React.createElement("div", {
     id: "home"
-  }, React.createElement("p", null, "Renders info from database"), React.createElement("button", {
+  }, React.createElement("span", {
+    id: "info"
+  }), React.createElement("button", {
     onClick: e => {
       props.click(e);
     }
@@ -191,6 +231,7 @@ class LoadPage extends React.Component {
       data: bill,
       success: function (result) {
         console.log('success', result);
+        loadCartInfo();
       }
     });
     this.setState(state => ({
@@ -202,23 +243,12 @@ class LoadPage extends React.Component {
   }
 
   submitConfirm(event) {
-    var gotToHome = () => {
-      this.setState(state => ({
-        form: 'homePage',
-        page: React.createElement(HomePage, {
-          click: this.checkout
-        })
-      }));
-    };
-
-    $.ajax({
-      method: 'GET',
-      url: 'confirmation',
-      success: function (result) {
-        console.log('sucess', result);
-        goToHome();
-      }
-    });
+    this.setState(state => ({
+      form: 'homePage',
+      page: React.createElement(HomePage, {
+        click: this.checkout
+      })
+    }));
   }
 
   render() {

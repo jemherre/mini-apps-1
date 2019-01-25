@@ -33,7 +33,7 @@ var createDB = function(){
       FOREIGN KEY (user_id) REFERENCES Users (user_id) )`);
     db.run(`CREATE TABLE BillingInfo 
     (bill_id INTEGER PRIMARY KEY AUTOINCREMENT, 
-      cc int, exp date,cvv int, zip int,
+      cc int, exp varchar,cvv int, zip int,
       user_id int,
       FOREIGN KEY (user_id) REFERENCES Users (user_id) )`);
   });

@@ -41,9 +41,9 @@ function BillingInfo(props){
   return (
     <div id='billingForm'>
       <form onClick={(e)=>{props.click(e)}} >
-        <p> Credit Card #: <input type='text' id='cc'/></p>
+        <p> CC #: <input type='text' id='cc'/></p>
         <p>Expiry Date: <input type='text' id='eDate'/></p>
-        <p>CVV:<input type='text' id='cvv'/> </p>
+        <p>C V V:<input type='text' id='cvv'/> </p>
         <p>zip code: <input type='text' id='zip'/></p>
         <input type='submit' value='next'/>
       </form>
@@ -51,10 +51,47 @@ function BillingInfo(props){
   );
 }
 
+function loadCartInfo(cb){
+  $.ajax({
+    method: 'GET',
+    url: '/confirmation',
+    success: function(result){
+      console.log('success',result);
+      var data = JSON.parse(result);
+      var html = `
+      <div id='user'> 
+      User:
+      <p>Name: ${data.user.name}</p>
+      <p>Email: ${data.user.email}</p>
+      </div>
+      <br>
+      <div id='address'>
+      Address:
+      <p>Address 1: ${data.ship.add1} </p>
+      <p>Address 2: ${data.ship.add2} </p>
+      <p>city: ${data.ship.city}</p>
+      <p>state: ${data.ship.state} </p>
+      <p>zip code: ${data.ship.zip}</p>
+      <p>phone number: ${data.ship.phone}</p>
+      </div>
+      <br>
+      <div id='billing'>
+      Billing:
+      <p>Credit Card#: ${data.bill.cc} </p>
+      <p>exp: ${data.bill.exp} </p>
+      <p>cvv: ${data.bill.cvv}</p>
+      <p>zip code: ${data.bill.zip}</p>
+      </div>`;
+
+      document.getElementById('info').innerHTML= html;
+    } 
+  });
+};
+
 function ConfirmationPage(props){
   return (
     <div id='home'>
-      <p>Renders info from database</p>
+      <span id='info'></span>
       <button onClick={(e)=>{props.click(e)}}> Purchase </button>
     </div>
   );
@@ -139,26 +176,18 @@ class LoadPage extends React.Component{
       data: bill,
       success: function(result){
         console.log('success',result);
+        loadCartInfo();
       }
     });
+    
     this.setState(state=>({form:'confirmation',
       page: <ConfirmationPage click={this.submitConfirm}/>
     }));
   }
   submitConfirm(event){
-  var gotToHome = ()=>{this.setState(state=>({form:'homePage',
+  this.setState(state=>({form:'homePage',
     page: <HomePage click={this.checkout}/>
-  }))};
-
-  $.ajax({
-    method: 'GET',
-    url: 'confirmation',
-    success: function(result){
-      console.log('sucess',result);
-      goToHome();
-    }
-  });
-
+  }));
   }
 
   render(){
